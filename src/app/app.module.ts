@@ -4,29 +4,49 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { AngularFireModule } from 'angularfire2';
-import { environment } from '../environments/environment';
 
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule } from 'angularfire2/auth';
 
-/// DELETE firebaseConfig
-/// Add your own firebase config to environment.ts
-/// Then use it to initialize angularfire2 AngularFireModule.initializeApp(environment.firebaseConfig),
-import { firebaseConfig } from '../env'; 
+
+
+
+
+
+
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatCardModule, MatButtonModule } from '@angular/material';
+
+import { HammerCardComponent } from './hammer-card/hammer-card.component';
+import { HammertimeDirective } from './hammertime.directive';
+
+import * as Hammer from 'hammerjs';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+
+export class MyHammerConfig extends HammerGestureConfig  {
+  overrides = <any>{
+      // override hammerjs default configuration
+      'swipe': { direction: Hammer.DIRECTION_ALL  }
+  }
+}
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HammerCardComponent,
+    HammertimeDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireAuthModule
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatButtonModule
   ],
-  providers: [],
+  providers: [ { 
+    provide: HAMMER_GESTURE_CONFIG, 
+    useClass: MyHammerConfig 
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
